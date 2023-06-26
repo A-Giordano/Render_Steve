@@ -1,2 +1,2 @@
 langchain
-chainlit==0.4.1
+chainlit==0.4.101
