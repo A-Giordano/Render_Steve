@@ -10,8 +10,6 @@ from langchain.schema import SystemMessage
 from langchain.utilities import BingSearchAPIWrapper
 from langchain.memory import ConversationBufferMemory, RedisChatMessageHistory
 from langchain.prompts import MessagesPlaceholder
-from custom_combined_memory import CustomCombinedMemory
-import faiss
 from time import time
 from custom_memory import ConversationLTSTMemory
 from langchain.memory import VectorStoreRetrieverMemory
