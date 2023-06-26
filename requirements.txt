@@ -1,5 +1,5 @@
 langchain
-chainlit==0.4.101
+chainlit
 pinecone-client
 redis
 promptlayer
