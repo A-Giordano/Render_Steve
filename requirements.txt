@@ -1,2 +1,5 @@
 langchain
 chainlit==0.4.101
+pinecone-client
+redis
+promptlayer
