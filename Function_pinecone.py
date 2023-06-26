@@ -75,7 +75,7 @@ def get_agent(namespace):
                                                             ))
     #############################################
 
-    message_history = RedisChatMessageHistory(url='redis://localhost:6379/0', ttl=600, session_id=namespace)
+    message_history = RedisChatMessageHistory(url=os.getenv('REDIS_URL'), ttl=600, session_id=namespace)
     memory = ConversationLTSTMemory(memory_key="memory",
                                     k=2,
                                     # human_prefix="Human",
