@@ -14,15 +14,15 @@ from time import time
 from custom_memory import ConversationLTSTMemory
 from langchain.memory import VectorStoreRetrieverMemory
 from langchain.memory import ConversationBufferWindowMemory
-
+from datetime import datetime
 import os
 # from dotenv import load_dotenv
 # load_dotenv()
 
 
 def get_agent(namespace):
-    llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
-    # llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
+    # llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
+    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
 
     ##########################################
 
@@ -87,7 +87,9 @@ def get_agent(namespace):
 
     agent_kwargs = {
         "extra_prompt_messages": [MessagesPlaceholder(variable_name="memory")],
-        "system_message": SystemMessage(content="You are Steve Jobs, always reply as him.")
+        "system_message": SystemMessage(content=f"""You are Steve Jobs, always reply as him.
+
+Today date is: {datetime.today().strftime('%Y-%m-%d')}""")
     }
     agent_chain = initialize_agent(tools,
                                    llm,
