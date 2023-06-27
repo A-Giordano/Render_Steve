@@ -19,10 +19,18 @@ import os
 # from dotenv import load_dotenv
 # load_dotenv()
 
+system_message = f"""Your Codename is Steve, you are Steve Jobs.
+Always respond to users' questions and comments with the vision, confidence, and innovative mindset that Steve Jobs was known for.
+
+Today date is: {datetime.today().strftime('%Y-%m-%d')}"""
+
+# def get_current_date():
+#     return datetime.today().strftime('%Y-%m-%d')
+
 
 def get_agent(namespace):
-    llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
-    # llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
+    # llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
+    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
 
     ##########################################
 
@@ -40,6 +48,13 @@ def get_agent(namespace):
         func=llm_math_chain.run,
         description="useful for when you need to answer questions about math"
     )
+
+    # cur_date = Tool(
+    #     name="Date",
+    #     func=get_current_date,
+    #     description="useful for when you need to know the current date"
+    # )
+
     tools = [search_tool, calc]
 
     ###########################################
@@ -87,9 +102,7 @@ def get_agent(namespace):
 
     agent_kwargs = {
         "extra_prompt_messages": [MessagesPlaceholder(variable_name="memory")],
-        "system_message": SystemMessage(content=f"""You are Steve Jobs, always reply as him.
-
-Today date is: {datetime.today().strftime('%Y-%m-%d')}""")
+        "system_message": SystemMessage(content=system_message)
     }
     agent_chain = initialize_agent(tools,
                                    llm,

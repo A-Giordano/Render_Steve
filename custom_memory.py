@@ -57,12 +57,18 @@ class ConversationLTSTMemory(BaseChatMemory):
         long_term_memory = self.load_lt_memory_variables(inputs)
         long_term_memory.extend(short_term_memory)
 
+        unique_contents = set()
+        filtered_messages = [msg for msg in long_term_memory if
+                             msg.content not in unique_contents
+                             and not unique_contents.add(msg.content)]
+
+        print(*[mex.content for mex in filtered_messages], sep="\n\n")
         if self.return_messages:
-            return {self.memory_key: long_term_memory}
+            return {self.memory_key: filtered_messages}
 
         else:
             return {self.memory_key: get_buffer_string(
-                long_term_memory,
+                filtered_messages,
                 human_prefix=self.human_prefix,
                 ai_prefix=self.ai_prefix,
             )}
@@ -107,7 +113,7 @@ class ConversationLTSTMemory(BaseChatMemory):
         user_input = parts[0].strip()
         output = parts[1].strip()
 
-        return HumanMessage(content=user_input+" v"), AIMessage(content=output+" v")
+        return HumanMessage(content=user_input), AIMessage(content=output)
 
     def _form_documents(
             self, inputs: Dict[str, Any], outputs: Dict[str, str]
