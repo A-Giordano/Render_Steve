@@ -21,8 +21,8 @@ import os
 
 
 def get_agent(namespace):
-    # llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
-    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
+    llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
+    # llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
 
     ##########################################
 
