@@ -1,5 +1,0 @@
-langchain
-chainlit
-pinecone-client
-redis
-promptlayer

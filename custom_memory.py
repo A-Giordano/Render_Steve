@@ -55,8 +55,10 @@ class ConversationLTSTMemory(BaseChatMemory):
         """Return history buffer."""
         short_term_memory = self.chat_memory.messages[-self.k * 2:] if self.k > 0 else []
         long_term_memory = self.load_lt_memory_variables(inputs)
-        long_term_memory.extend(short_term_memory)
-
+        total_memory = [AIMessage(content="Hi, I'm Steve Jobs")]
+        total_memory.extend(long_term_memory + short_term_memory)
+        # long_term_memory.extend(short_term_memory)
+        # Filter messages to have only the uniques
         unique_contents = set()
         filtered_messages = [msg for msg in long_term_memory if
                              msg.content not in unique_contents
