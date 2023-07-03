@@ -58,12 +58,14 @@ class ConversationLTSTMemory(BaseChatMemory):
         total_memory = [AIMessage(content="Hi, I'm Steve Jobs")]
         total_memory.extend(long_term_memory + short_term_memory)
         # long_term_memory.extend(short_term_memory)
+        print([mex.content for mex in total_memory])
         # Filter messages to have only the uniques
         unique_contents = set()
         filtered_messages = [msg for msg in long_term_memory if
                              msg.content not in unique_contents
                              and not unique_contents.add(msg.content)]
 
+        print([mex.content for mex in filtered_messages])
         print(*[mex.content for mex in filtered_messages], sep="\n\n")
         if self.return_messages:
             return {self.memory_key: filtered_messages}
