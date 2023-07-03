@@ -55,7 +55,7 @@ class ConversationLTSTMemory(BaseChatMemory):
         """Return history buffer."""
         short_term_memory = self.chat_memory.messages[-self.k * 2:] if self.k > 0 else []
         long_term_memory = self.load_lt_memory_variables(inputs)
-        total_memory = [AIMessage(content="Hi, I'm Steve Jobs")]
+        total_memory = [AIMessage(content="Hi, I'm Steve Jobs, the iconic co-founder of Apple.")]
         total_memory.extend(long_term_memory + short_term_memory)
         # long_term_memory.extend(short_term_memory)
         print([mex.content for mex in total_memory])
