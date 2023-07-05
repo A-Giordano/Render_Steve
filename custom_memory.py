@@ -14,7 +14,6 @@ from langchain.schema import (
     BaseMessage,
     HumanMessage,
 )
-from datetime import date
 
 
 class ConversationLTSTMemory(BaseChatMemory):
@@ -131,8 +130,7 @@ class ConversationLTSTMemory(BaseChatMemory):
             for k, v in list(filtered_inputs.items()) + list(outputs.items())
         ]
         page_content = "\n".join(texts)
-        return [Document(page_content=page_content,
-                         metadats={"date": date()})]
+        return [Document(page_content=page_content)]
 
     def _get_prompt_input_key(self, inputs: Dict[str, Any]) -> str:
         """Get the input key for the prompt."""
