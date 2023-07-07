@@ -117,8 +117,8 @@ def get_agent(namespace):
     }
     agent_chain = initialize_agent(tools,
                                    llm,
-                                   # agent=AgentType.OPENAI_FUNCTIONS,
-                                   agent=AgentType.OPENAI_MULTI_FUNCTIONS,
+                                   agent=AgentType.OPENAI_FUNCTIONS,
+                                   # agent=AgentType.OPENAI_MULTI_FUNCTIONS,
                                    agent_kwargs=agent_kwargs,
                                    memory=memory,
                                    max_execution_time=10,
