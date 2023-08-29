@@ -16,8 +16,20 @@ from langchain.memory import VectorStoreRetrieverMemory
 from langchain.memory import ConversationBufferWindowMemory
 from datetime import datetime
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
+
+from langchain.tools import DuckDuckGoSearchRun
+from langchain.tools import WikipediaQueryRun
+from langchain.utilities import WikipediaAPIWrapper
+from langchain.utilities import GoogleSearchAPIWrapper
+
+
+from dotenv import load_dotenv
+load_dotenv()
+
+# import langchain
+# langchain.debug = True
+
+
 
 system_message = f"""
 <instructions>
@@ -41,23 +53,27 @@ Today date is: {datetime.today().strftime('%Y-%m-%d')}"""
 def get_agent(namespace):
     print(f"namespace: {namespace}")
     # llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
-    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613", streaming=True)
+    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", streaming=True)
 
     ##########################################
 
     llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
     search = BingSearchAPIWrapper()
+    # search = DuckDuckGoSearchRun()
+    # search = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+    # search = GoogleSearchAPIWrapper()
 
     search_tool = Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events or the current state of the world. You should ask targeted questions"
+        description="useful for when you need to answer questions about the current state of the world. You should ask targeted questions"
     )
+
 
     calc = Tool(
         name="Calculator",
         func=llm_math_chain.run,
-        description="useful for when you need to answer questions about math"
+        description="useful for when you need to answer mathematical questions, you can input only numerical expression"
     )
 
     # cur_date = Tool(
@@ -68,7 +84,7 @@ def get_agent(namespace):
 
     tools = [search_tool, calc]
 
-    ###########################################
+    ##########################################
     pinecone.init(environment="us-west1-gcp-free")
 
     index_name = 'langchain-demo1'
@@ -122,14 +138,14 @@ def get_agent(namespace):
                                    agent_kwargs=agent_kwargs,
                                    memory=memory,
                                    max_execution_time=10,
-                                   verbose=False)
+                                   verbose=True)
 
     return agent_chain
 
-# agent_chain  = get_agent('usertest1')
-
+# agent_chain  = get_agent('test1')
+#
 # start = time()
-# print(agent_chain.run(input="hi my name is bob and i'm a software developer"))
+# print(agent_chain.run(input="what is the summed age of the actors brad pit and leonardo di caprio raised to the power of 5?"))
 # print(f"elapsed time: {time() - start}")
 #
 # start = time()

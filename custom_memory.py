@@ -88,9 +88,10 @@ class ConversationLTSTMemory(BaseChatMemory):
         documents = self._form_documents(inputs, outputs)
         self.long_term_retriever.add_documents(documents)
 
-    def clear(self) -> None:
-        """Clear memory contents."""
-        self.chat_memory.clear()
+    def add_welcome_message(self, message):
+        self.chat_memory.add_ai_message(message)
+
+
 
     def load_lt_memory_variables(
             self, inputs: Dict[str, Any]
