@@ -1,4 +1,4 @@
-from langchain.chat_models import PromptLayerChatOpenAI
+from langchain.chat_models import PromptLayerChatOpenAI, ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
@@ -18,12 +18,12 @@ In the third phrase shortly explain him the correct answer.
 In the fourth phrase ask him a question to continue the conversation."""
 
 def welcome_message():
-    llm = PromptLayerChatOpenAI(temperature=0.5)
+    llm = ChatOpenAI(temperature=0.5)
 
     prompt = PromptTemplate(
         input_variables=["name", "n_session", "avg_score", "question", "correct_answer"],
         template=mistaken_session_prompt,
     )
     chain = LLMChain(llm=llm, prompt=prompt)
-    return chain.run(name="Andrea", n_session=5, avg_score=700, question="what colour is the sky?", correct_answer= "blue")
+    return chain.run(name="Andrea", n_session="5", avg_score="700", question="what colour is the sky?", correct_answer= "blue")
 
