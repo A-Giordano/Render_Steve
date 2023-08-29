@@ -1,4 +1,5 @@
 langchain
+openai
 chainlit
 pinecone-client
 redis
