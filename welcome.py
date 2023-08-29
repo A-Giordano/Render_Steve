@@ -21,9 +21,9 @@ def welcome_message():
     llm = ChatOpenAI(temperature=0.5)
 
     prompt = PromptTemplate(
-        input_variables=["name", "n_session", "avg_score", "question", "correct_answer"],
+        input_variables=["name", "n_sessions", "avg_score", "question", "correct_answer"],
         template=mistaken_session_prompt,
     )
     chain = LLMChain(llm=llm, prompt=prompt)
-    return chain.run(name="Andrea", n_session="5", avg_score="700", question="what colour is the sky?", correct_answer= "blue")
+    return chain.run(name="Andrea", n_sessions=5, avg_score=700, question="what colour is the sky?", correct_answer= "blue")
 
