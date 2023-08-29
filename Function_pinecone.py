@@ -102,7 +102,7 @@ def get_agent(namespace):
 
     embeddings = OpenAIEmbeddings()
     vectorstore = Pinecone(index=index,
-                           embedding_function=embeddings.embed_query,
+                           embedding=embeddings.embed_query,
                            text_key="text",
                            namespace=namespace,
                            )
