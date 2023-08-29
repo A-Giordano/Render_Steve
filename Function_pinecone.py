@@ -85,7 +85,9 @@ def get_agent(namespace):
     tools = [search_tool, calc]
 
     ##########################################
-    pinecone.init(environment="us-west1-gcp-free")
+    # pinecone.init(environment="us-west1-gcp-free")
+    pinecone.init(environment="gcp-starter")
+
 
     index_name = 'langchain-demo1'
     if index_name not in pinecone.list_indexes():
