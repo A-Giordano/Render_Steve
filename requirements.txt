@@ -4,3 +4,4 @@ chainlit
 pinecone-client
 redis
 promptlayer
+tiktoken
