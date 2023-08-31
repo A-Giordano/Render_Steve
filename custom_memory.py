@@ -17,7 +17,7 @@ from langchain.schema import (
 from datetime import date
 
 
-class ConversationLTSTMemory(BaseChatMemory):
+class ConversationLSTMemory(BaseChatMemory):
     """Buffer for storing conversation memory."""
     chat_memory: BaseChatMessageHistory = Field(default_factory=ChatMessageHistory)
     human_prefix: str = "Human"
@@ -26,7 +26,7 @@ class ConversationLTSTMemory(BaseChatMemory):
     long_term_retriever: VectorStoreRetriever = Field(exclude=True)
     # short_term_memory: BaseMemory
     # return_docs: bool = False
-    k: int = 2
+    st_memory_interactions: int = 2
 
     # @property
     # def buffer(self) -> Any:
@@ -54,7 +54,7 @@ class ConversationLTSTMemory(BaseChatMemory):
 
     def load_memory_variables(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """Return history buffer."""
-        short_term_memory = self.chat_memory.messages[-self.k * 2:] if self.k > 0 else []
+        short_term_memory = self.chat_memory.messages[-self.st_memory_interactions * 2:] if self.st_memory_interactions > 0 else []
         long_term_memory = self.load_lt_memory_variables(inputs)
         total_memory = [AIMessage(content="Hi, I'm Steve Jobs, the iconic co-founder of Apple.")]
         total_memory.extend(long_term_memory + short_term_memory)
@@ -88,7 +88,7 @@ class ConversationLTSTMemory(BaseChatMemory):
         documents = self._form_documents(inputs, outputs)
         self.long_term_retriever.add_documents(documents)
 
-    def add_welcome_message(self, message):
+    def add_st_ai_message(self, message):
         self.chat_memory.add_ai_message(message)
 
 

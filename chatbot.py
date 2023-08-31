@@ -205,155 +205,19 @@ class Chatbot:
             raise NotImplementedError
         response = self.agent.run(message)
         if moderation:
-            moderation_chain_error = OpenAIModerationChain(error=True)
+            moderation_chain = OpenAIModerationChain(error=True)
             try:
-                moderation_chain_error.run(response)
+                moderation_chain.run(response)
             except ValueError:
                 return "Sorry"
         return response
 
-
-# username = "aaa"
-# steve_personality = BotPersonality("Steve", system_message)
-# chatbot = Chatbot(username, steve_personality)
-# chatbot.init_tools()
-# chatbot.init_short_term_memory(ttl=900, returned_interactions=4)
-# chatbot.init_long_term_memory(env="gcp-starter", index_name='langchain-demo1',
-#                               returned_interactions=4, interactions_threshold=0.4)
-# chatbot.init_agent()
-
-
-def get_agent(namespace):
-    print(f"namespace: {namespace}")
-    # llm = PromptLayerChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613")
-    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", streaming=True)
-
-    ##########################################
-
-    llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
-    search = BingSearchAPIWrapper()
-    # search = DuckDuckGoSearchRun()
-    # search = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
-    # search = GoogleSearchAPIWrapper()
-
-    search_tool = Tool(
-        name="Search",
-        func=search.run,
-        description="useful for when you need to answer questions about the current state of the world. You should ask targeted questions"
-    )
-
-    calc = Tool(
-        name="Calculator",
-        func=llm_math_chain.run,
-        description="useful for when you need to answer mathematical questions, you can input only numerical expression"
-    )
-
-    # cur_date = Tool(
-    #     name="Date",
-    #     func=get_current_date,
-    #     description="useful for when you need to know the current date"
-    # )
-
-    tools = [search_tool, calc]
-
-    ##########################################
-    pinecone.init(environment="us-west1-gcp-free")
-    pinecone.init(environment="gcp-starter")
-
-    index_name = 'langchain-demo1'
-    if index_name not in pinecone.list_indexes():
-        # we create a new index
-        pinecone.create_index(
-            name=index_name,
-            metric='dotproduct',
-            dimension=1536  # 1536 dim of text-embedding-ada-002
-        )
-
-    index = pinecone.Index(index_name)
-
-    embeddings = OpenAIEmbeddings()
-    vectorstore = Pinecone(index=index,
-                           embedding=embeddings.embed_query,
-                           text_key="text",
-                           namespace=namespace,
-                           )
-    # retriever = vectorstore.as_retriever(search_kwargs=dict(k=2))
-
-    retriever = vectorstore.as_retriever(search_type="similarity_score_threshold",
-                                         search_kwargs=dict(k=4,
-                                                            # search_type="mmr",
-                                                            # fetch_k=4,
-                                                            # lambda_mult=0.2,
-                                                            score_threshold=0.4
-                                                            ))
-    #############################################
-
-    message_history = RedisChatMessageHistory(url=os.getenv('REDIS_URL'), ttl=600, session_id=namespace)
-    memory = ConversationLSTMemory(memory_key="memory",
-                                   k=2,
-                                   # human_prefix="Human",
-                                   # ai_prefix="AI",
-                                   chat_memory=message_history,
-                                   long_term_retriever=retriever,
-                                   input_key="input",
-                                   return_messages=True)
-
-    # memory = ConversationBufferMemory(memory_key="memory", return_messages=True)
-
-    agent_kwargs = {
-        "extra_prompt_messages": [MessagesPlaceholder(variable_name="memory")],
-        "system_message": SystemMessage(content=system_message)
-    }
-    agent_chain = initialize_agent(tools,
-                                   llm,
-                                   agent=AgentType.OPENAI_FUNCTIONS,
-                                   # agent=AgentType.OPENAI_MULTI_FUNCTIONS,
-                                   agent_kwargs=agent_kwargs,
-                                   memory=memory,
-                                   max_execution_time=10,
-                                   verbose=True)
-
-    return agent_chain
-
-# agent_chain  = get_agent('test1')
-#
-# start = time()
-# print(agent_chain.run(input="what is the summed age of the actors brad pit and leonardo di caprio raised to the power of 5?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="what's your name?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="who is maradona?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="who is the prime minister of italy?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="how old is she?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="how old is the oldest between the french and american prime minister?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="who won the last world cup?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="where is the capital of italy?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="what's my job?"))
-# print(f"elapsed time: {time() - start}")
-#
-# start = time()
-# print(agent_chain.run(input="what's my name?"))
-# print(f"elapsed time: {time() - start}")
-# pass
+# if __name__ == "__main__":
+    # username = "aaa"
+    # steve_personality = BotPersonality("Steve", system_message)
+    # chatbot = Chatbot(username, steve_personality)
+    # chatbot.init_tools()
+    # chatbot.init_short_term_memory(ttl=900, returned_interactions=4)
+    # chatbot.init_long_term_memory(env="gcp-starter", index_name='langchain-demo1',
+    #                               returned_interactions=4, interactions_threshold=0.4)
+    # chatbot.init_agent()
