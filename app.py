@@ -19,7 +19,7 @@ def init():
     chain = get_agent(namespace=str(uuid.uuid4()))
     print(f"exec time: {time.time() - s}")
     welcome_msg = welcome_message()
-    chain.memory.add_st_message(welcome_msg)
+    chain.memory.add_st_ai_message(welcome_msg)
     cl.user_session.set("chain", chain)
     cl.Message(content=welcome_message()).send()
 
