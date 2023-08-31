@@ -260,7 +260,7 @@ def get_agent(namespace):
     pinecone.init(environment="eu-west4-gcp")
     # pinecone.init(environment="gcp-starter")
 
-    index_name = 'chainlit_demo'
+    index_name = 'chainlit-demo'
     if index_name not in pinecone.list_indexes():
         # we create a new index
         pinecone.create_index(
