@@ -1,6 +1,8 @@
 import os
 from langchain import PromptTemplate, OpenAI, LLMChain
 import chainlit as cl
+from langchain.chains import OpenAIModerationChain
+
 from Function_pinecone import get_agent
 from welcome import welcome_message
 import uuid
@@ -29,6 +31,11 @@ async def main(message):
     chain = cl.user_session.get("chain")
 
     res = chain.run(message)
+    moderation_chain = OpenAIModerationChain(error=True)
+    try:
+        moderation_chain.run(res)
+    except ValueError:
+        res = "Sorry ValErr"
     # print(res)
     #
     # answer = res["result"]
