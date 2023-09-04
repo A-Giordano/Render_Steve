@@ -19,12 +19,12 @@ import os
 @cl.on_chat_start
 def init():
     s = time.time()
+    print(f"PINECONE_API_KEY {os.getenv('PINECONE_API_KEY')}")
     chain = get_agent(namespace=str(uuid.uuid4()))
     print(f"exec time: {time.time() - s}")
     welcome_msg = welcome_message()
     chain.memory.add_st_ai_message(welcome_msg)
     cl.user_session.set("chain", chain)
-    print(f"PINECONE_API_KEY {os.getenv('PINECONE_API_KEY')}")
     # await cl.Message(content=welcome_message()).send()
 
 
