@@ -22,8 +22,8 @@ def init():
     print(f"exec time: {time.time() - s}")
     welcome_msg = welcome_message()
     chain.memory.add_st_ai_message(welcome_msg)
-    cl.user_session.set("chain", chain)
-    cl.Message(content=welcome_message()).send()
+    await cl.user_session.set("chain", chain)
+    await cl.Message(content=welcome_message()).send()
 
 
 @cl.on_message
