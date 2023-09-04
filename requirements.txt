@@ -1,7 +1,7 @@
 langchain
 openai
 chainlit
-pinecone-client
+pinecone-client==2.2.2
 redis
 promptlayer
 tiktoken
