@@ -7,6 +7,7 @@ from Function_pinecone import get_agent
 from welcome import welcome_message
 import uuid
 import time
+import os
 
 # @cl.langchain_factory(use_async=False)
 # def factory():
@@ -22,14 +23,15 @@ def init():
     print(f"exec time: {time.time() - s}")
     welcome_msg = welcome_message()
     chain.memory.add_st_ai_message(welcome_msg)
-    await cl.user_session.set("chain", chain)
-    await cl.Message(content=welcome_message()).send()
+    cl.user_session.set("chain", chain)
+    print(f"PINECONE_API_KEY {os.getenv('PINECONE_API_KEY')}")
+    # await cl.Message(content=welcome_message()).send()
 
 
 @cl.on_message
 async def main(message):
     chain = cl.user_session.get("chain")
-
+    print(f"PINECONE_API_KEY {os.getenv('PINECONE_API_KEY')}")
     res = chain.run(message)
     moderation_chain = OpenAIModerationChain(error=True)
     try:
